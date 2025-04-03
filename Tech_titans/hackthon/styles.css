@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Monitor - Reports</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Health Reports</h1>
+        <div id="report-container">
+            <p>Loading health data...</p>
+        </div>
+        <button onclick="fetchHealthData()">Refresh Data</button>
+    </div>
+
+    <script>
+        async function fetchHealthData() {
+            const response = await fetch('/api/health-report');
+            const data = await response.json();
+            const container = document.getElementById('report-container');
+
+            if (data.success) {
+                container.innerHTML = `
+                    <h2>${data.name}'s Health Report</h2>
+                    <p>Heart Rate: ${data.heartRate} bpm</p>
+                    <p>Blood Pressure: ${data.bloodPressure}</p>
+                    <p>Temperature: ${data.temperature} °C</p>
+                    <p>Oxygen Level: ${data.oxygenLevel}%</p>
+                `;
+            } else {
+                container.innerHTML = <p>Error fetching data</p>;
+            }
+        }
+
+        window.onload = fetchHealthData;
+    </script>
+</body>
+</html>
+
+
